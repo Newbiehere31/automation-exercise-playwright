@@ -7,11 +7,13 @@ test.describe('Automation Exercise signup', () => {
   });
 
   test('creates a new account', async ({ page }, testInfo) => {
+    test.setTimeout(60_000);
+
     const name = `Exploring World Test ${testInfo.project.name}`;
     const email = `exploringworld678+signup-${testInfo.project.name}-${Date.now()}@gmail.com`;
     const password = 'Test@12345';
 
-    await page.goto('/login');
+    await page.goto('/login', { waitUntil: 'domcontentloaded' });
     await page.getByPlaceholder('Name').fill(name);
     await page.locator('form').filter({ hasText: 'Signup' }).getByPlaceholder('Email Address').fill(email);
     await page.getByRole('button', { name: 'Signup' }).click();

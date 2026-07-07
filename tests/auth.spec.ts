@@ -7,7 +7,7 @@ test.describe('Automation Exercise authentication', () => {
   });
 
   test('shows login and signup forms', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto('/login', { waitUntil: 'domcontentloaded' });
 
     await expect(page.getByRole('heading', { name: /login to your account/i })).toBeVisible();
     await expect(page.getByPlaceholder('Email Address').first()).toBeVisible();

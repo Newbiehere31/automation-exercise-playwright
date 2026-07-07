@@ -10,6 +10,9 @@ End-to-end tests for [Automation Exercise](https://automationexercise.com/) usin
 - Full signup flow with a fresh Gmail plus-address
 - Invalid login error message
 - Valid login after logout
+- Product search and product detail verification
+- Add product to cart and verify cart contents
+- Contact form submission
 
 ## Run On This Machine
 
@@ -60,8 +63,11 @@ The custom report includes failed test stack traces and was verified with an int
 │   └── html-summary-reporter.ts
 ├── tests/
 │   ├── auth.spec.ts
+│   ├── cart.spec.ts
+│   ├── contact.spec.ts
 │   ├── home.spec.ts
 │   ├── login.spec.ts
+│   ├── products.spec.ts
 │   ├── signup.spec.ts
 │   └── support/
 ├── playwright.config.ts

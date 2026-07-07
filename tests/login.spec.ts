@@ -7,7 +7,7 @@ test.describe('Automation Exercise login', () => {
   });
 
   test('shows an error for invalid login details', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto('/login', { waitUntil: 'domcontentloaded' });
 
     await page
       .locator('form')
@@ -27,7 +27,7 @@ test.describe('Automation Exercise login', () => {
     const email = `exploringworld678+login-${testInfo.project.name}-${Date.now()}@gmail.com`;
     const password = 'Login@Test123';
 
-    await page.goto('/login');
+    await page.goto('/login', { waitUntil: 'domcontentloaded' });
     await page.getByPlaceholder('Name').fill(name);
     await page.locator('form').filter({ hasText: 'Signup' }).getByPlaceholder('Email Address').fill(email);
     await page.getByRole('button', { name: 'Signup' }).click();

@@ -7,7 +7,7 @@ test.describe('Automation Exercise home page', () => {
   });
 
   test('loads the home page and shows main navigation', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     await expect(page).toHaveTitle(/Automation Exercise/i);
     await expect(page.getByRole('link', { name: /home/i })).toBeVisible();
@@ -16,7 +16,7 @@ test.describe('Automation Exercise home page', () => {
   });
 
   test('opens the products page', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.getByRole('link', { name: /products/i }).click();
 
     await expect(page).toHaveURL(/\/products$/);
