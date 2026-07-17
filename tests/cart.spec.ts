@@ -1,28 +1,36 @@
-import { expect, test } from '@playwright/test';
-import { blockThirdPartyAds } from './support/network';
+import { test } from './support/fixtures';
 
 test.describe('Automation Exercise cart', () => {
-  test.beforeEach(async ({ page }) => {
-    await blockThirdPartyAds(page);
+  test('adds a product to the cart and views the cart', async ({ productsPage, cartPage }) => {
+    await productsPage.goto();
+
+    const productName = await productsPage.addFirstProductToCart();
+    await productsPage.viewCartFromModal();
+
+    await cartPage.expectCartOpen();
+    await cartPage.expectProductRow(productName, 1);
   });
 
-  test('adds a product to the cart and views the cart', async ({ page }) => {
-    await page.goto('/products', { waitUntil: 'domcontentloaded' });
+  test('adds a product with custom quantity from the detail page', async ({ productsPage, cartPage }) => {
+    await productsPage.goto();
+    await productsPage.openFirstProductDetail();
+    await productsPage.expectProductDetailVisible();
 
-    await expect(page.getByRole('heading', { name: /all products/i })).toBeVisible();
+    const productName = await productsPage.addDetailProductToCart(3);
+    await productsPage.viewCartFromModal();
 
-    const firstProduct = page.locator('.product-image-wrapper').first();
-    const productName = (await firstProduct.locator('.productinfo p').innerText()).trim();
+    await cartPage.expectCartOpen();
+    await cartPage.expectProductRow(productName, 3);
+  });
 
-    await firstProduct.hover();
-    await firstProduct.locator('.overlay-content a.add-to-cart').click();
+  test('removes a product from the cart', async ({ productsPage, cartPage }) => {
+    await productsPage.goto();
 
-    await expect(page.getByText('Added!')).toBeVisible();
-    await page.getByRole('link', { name: /view cart/i }).click();
+    await productsPage.addFirstProductToCart();
+    await productsPage.viewCartFromModal();
+    await cartPage.expectCartOpen();
+    await cartPage.removeFirstProduct();
 
-    await expect(page).toHaveURL(/\/view_cart$/);
-    await expect(page.locator('#cart_info')).toContainText(productName);
-    await expect(page.locator('#cart_info')).toContainText('Rs.');
-    await expect(page.locator('.cart_quantity')).toContainText('1');
+    await cartPage.expectEmptyCart();
   });
 });
